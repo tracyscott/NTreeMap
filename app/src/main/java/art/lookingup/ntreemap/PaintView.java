@@ -1,12 +1,10 @@
 package art.lookingup.ntreemap;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.util.DisplayMetrics;
 import android.view.View;
 
 import java.util.ArrayList;
@@ -14,7 +12,7 @@ import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class PaintView extends View {
-    Paint defaultPaint, currentPaint, bgPaint, gridPaint;
+    Paint defaultPaint, currentPaint, bgPaint, gridPaint, runPaint;
     int width, height;
     // We want to auto-scale our measurement space to our View's pixel width and height.
     // To do so, we need to find the bounds in both X and Z.  We should probably just
@@ -25,18 +23,14 @@ public class PaintView extends View {
     int minX = Integer.MAX_VALUE;
     int minZ = Integer.MAX_VALUE;
 
-    static public class Point3D {
-        public int x, y, z;
-
-        public Point3D(int x, int y, int z) {
-            this.x = x; this.y = y; this.z = z;
-        }
-    }
-
     // Measurements entered so far.
     // TODO(tracy): This will be moved to the main activity for data entry.  For now,
     // just generate some random ints.
     List<Point3D> points = new ArrayList<Point3D>();
+
+    // Leaf positions by run.  leaves[run#][leaf#];
+    public Point3D[][] leaves;
+    public int currentRun = 0;
 
     // Create some test data.
     public void generateRandomPoints(int numPoints, int radius) {
@@ -53,7 +47,7 @@ public class PaintView extends View {
 
     public void addPoint(Point3D point) {
         points.add(point);
-        updateBounds();
+        //updateBounds();
     }
 
     @SuppressLint("ResourceAsColor")
@@ -68,6 +62,11 @@ public class PaintView extends View {
         currentPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         currentPaint.setColor(Color.BLUE);
         currentPaint.setStyle(Paint.Style.FILL);
+
+        // All the points on the currently selected run will be this color.
+        runPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        runPaint.setColor(Color.YELLOW);
+        runPaint.setStyle(Paint.Style.FILL);
 
         bgPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         bgPaint.setColor(Color.BLACK);
@@ -92,7 +91,9 @@ public class PaintView extends View {
         int zRange = maxZ - minZ;
         int maxRange = (xRange>zRange)?xRange:zRange;
         // 0,0 is width/2, height/2.
-        float scale = width/maxRange;
+        if (maxRange < 100)
+            maxRange = 100;
+        float scale = (float)width/((float)maxRange*2f);
         float imgCoord = coordVal * scale + width/2;
         return imgCoord;
     }
@@ -114,6 +115,25 @@ public class PaintView extends View {
         }
     }
 
+    /**
+     * For now we will just compute the bounds on every draw
+     */
+    public void computeBounds() {
+        for (int runNum = 0; runNum < MainActivity.NUM_RUNS; runNum++) {
+            for (int leafNum = 0; leafNum < MainActivity.MAX_LEAVES_PER_RUN; leafNum++) {
+                Point3D point = leaves[runNum][leafNum];
+                if (point.x < minX)
+                    minX = point.x;
+                if (point.x > maxX)
+                    maxX = point.x;
+                if (point.z < minZ)
+                    minZ = point.z;
+                if (point.z > maxZ)
+                    maxZ = point.z;
+            }
+        }
+    }
+
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
@@ -123,11 +143,26 @@ public class PaintView extends View {
         width = getWidth();
         height = getHeight();
 
+        computeBounds();
         canvas.drawColor(Color.BLACK);
         canvas.drawLine(0, height/2, width, height/2, gridPaint);
 
+        /*
         for (Point3D point: points) {
             canvas.drawCircle(toImgSpace(point.x), toImgSpace(point.z), 6, defaultPaint);
+        } */
+        for (int runNum = 0; runNum < MainActivity.NUM_RUNS; runNum++) {
+            for (int leafNum = 0; leafNum < MainActivity.MAX_LEAVES_PER_RUN; leafNum++) {
+                Point3D leaf = leaves[runNum][leafNum];
+                if (leaf.x == 0 && leaf.y == 0 && leaf.z == 0)
+                    continue;
+                Paint whichPaint = defaultPaint;
+                if (runNum == currentRun)
+                    whichPaint = runPaint;
+                int imgX = (int)toImgSpace(leaf.x);
+                int imgY = height - (int)toImgSpace(leaf.z);
+                canvas.drawCircle(toImgSpace(leaf.x), imgY, 6, whichPaint);
+            }
         }
     }
 }

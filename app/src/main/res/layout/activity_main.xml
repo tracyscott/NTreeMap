@@ -22,14 +22,14 @@
         android:orientation="horizontal">
 
         <ImageButton
-            android:id="@+id/runUpButton"
+            android:id="@+id/runUpBtn"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight=".1"
             app:srcCompat="@android:drawable/arrow_up_float" />
 
         <ImageButton
-            android:id="@+id/runDownButton"
+            android:id="@+id/runDownBtn"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight=".1"
@@ -54,14 +54,14 @@
             android:textSize="24sp" />
 
         <ImageButton
-            android:id="@+id/leafUpButton"
+            android:id="@+id/leafUpBtn"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight=".1"
             app:srcCompat="@android:drawable/arrow_up_float" />
 
         <ImageButton
-            android:id="@+id/leafDownButton"
+            android:id="@+id/leafDownBtn"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight=".1"
@@ -77,7 +77,7 @@
             android:textStyle="bold" />
 
         <EditText
-            android:id="@+id/editTextNumberDecimal2"
+            android:id="@+id/leafView"
             android:layout_width="30dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -93,7 +93,7 @@
         android:orientation="horizontal">
 
         <TextView
-            android:id="@+id/textView4"
+            android:id="@+id/xViewLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight=".1"
@@ -111,7 +111,7 @@
             android:textSize="24sp" />
 
         <TextView
-            android:id="@+id/textView5"
+            android:id="@+id/yViewLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight=".1"
@@ -120,7 +120,7 @@
             android:textStyle="bold" />
 
         <EditText
-            android:id="@+id/xCoordView2"
+            android:id="@+id/yCoordView"
             android:layout_width="10dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -129,7 +129,7 @@
             android:textSize="24sp" />
 
         <TextView
-            android:id="@+id/textView6"
+            android:id="@+id/zViewLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight=".1"
@@ -138,7 +138,7 @@
             android:textStyle="bold" />
 
         <EditText
-            android:id="@+id/xCoordView3"
+            android:id="@+id/zCoordView"
             android:layout_width="10dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -147,7 +147,7 @@
             android:textSize="24sp" />
 
         <ImageButton
-            android:id="@+id/imageButton3"
+            android:id="@+id/updateLeafBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight=".1"

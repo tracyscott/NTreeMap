@@ -31,6 +31,7 @@ public class PaintView extends View {
     // Leaf positions by run.  leaves[run#][leaf#];
     public Point3D[][] leaves;
     public int currentRun = 0;
+    public int currentLeaf = 0;
 
     // Create some test data.
     public void generateRandomPoints(int numPoints, int radius) {
@@ -146,6 +147,7 @@ public class PaintView extends View {
         computeBounds();
         canvas.drawColor(Color.BLACK);
         canvas.drawLine(0, height/2, width, height/2, gridPaint);
+        canvas.drawLine(width/2, 0, width/2, height, gridPaint);
 
         /*
         for (Point3D point: points) {
@@ -159,6 +161,8 @@ public class PaintView extends View {
                 Paint whichPaint = defaultPaint;
                 if (runNum == currentRun)
                     whichPaint = runPaint;
+                if (runNum == currentRun && leafNum == currentLeaf)
+                    whichPaint = currentPaint;
                 int imgX = (int)toImgSpace(leaf.x);
                 int imgY = height - (int)toImgSpace(leaf.z);
                 canvas.drawCircle(toImgSpace(leaf.x), imgY, 6, whichPaint);

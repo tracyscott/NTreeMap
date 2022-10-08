@@ -28,6 +28,12 @@ public class MainActivity extends AppCompatActivity {
 
     public Point3D[][] leaves = new Point3D[NUM_RUNS][];
 
+    EditText runNumber;
+    EditText leafNumber;
+    EditText xCoord;
+    EditText yCoord;
+    EditText zCoord;
+
     // creating a variable for our relative layout
     private LinearLayout linearLayout;
 
@@ -49,6 +55,31 @@ public class MainActivity extends AppCompatActivity {
         appPrefs.edit().putInt("" + run + "." + leaf + "." + "x", leafPos.x).commit();
         appPrefs.edit().putInt("" + run + "." + leaf + "." + "y", leafPos.y).commit();
         appPrefs.edit().putInt("" + run + "." + leaf + "." + "z", leafPos.z).commit();
+    }
+
+    /**
+     * Called when a new run/leaf number is selected.  We need to update the values in
+     * the xCoord, yCoord, and zCoord text fields.
+     * @param run
+     * @param leaf
+     */
+    public void focusCurrentLeaf(int run, int leaf) {
+        Point3D leafPos = leaves[run][leaf];
+        xCoord.setText("" + leafPos.x);
+        yCoord.setText("" + leafPos.y);
+        zCoord.setText("" + leafPos.z);
+    }
+
+    public int getDisplayedLeafNum() {
+        if (leafNumber.getText().toString().equals(""))
+            return 0;
+        return Integer.parseInt(leafNumber.getText().toString());
+    }
+
+    public int getDisplayedRunNum() {
+        if (runNumber.getText().toString().equals(""))
+            return 0;
+        return Integer.parseInt(runNumber.getText().toString());
     }
 
     @Override
@@ -90,17 +121,80 @@ public class MainActivity extends AppCompatActivity {
         paintView.setLayoutParams(lp);
         paintView.leaves = leaves;
 
+        runNumber = (EditText) findViewById(R.id.runView);
         ImageButton runUpBtn = (ImageButton) findViewById(R.id.runUpBtn);
+        runUpBtn.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                int runNum = 0;
+                if (runNumber.getText().toString().equals(""))
+                    runNumber.setText("0");
+                else {
+                    runNum = Integer.parseInt(runNumber.getText().toString());
+                    runNum = (runNum + 1)%NUM_RUNS;
+                    runNumber.setText("" + runNum);
+                }
+                paintView.currentRun = runNum;
+                paintView.invalidate();
+                focusCurrentLeaf(runNum, getDisplayedLeafNum());
+            }
+        });
         ImageButton runDownBtn = (ImageButton) findViewById(R.id.runDownBtn);
-        EditText runNumber = (EditText) findViewById(R.id.runView);
+        runDownBtn.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                int runNum = 0;
+                if (runNumber.getText().toString().equals(""))
+                    runNumber.setText("0");
+                else {
+                    runNum = Integer.parseInt(runNumber.getText().toString());
+                    runNum = runNum - 1;
+                    if (runNum < 0) runNum = NUM_RUNS - 1;
+                    runNumber.setText("" + runNum);
+                }
+                paintView.currentRun = runNum;
+                paintView.invalidate();
+                focusCurrentLeaf(runNum, getDisplayedLeafNum());
+            }
+        });
 
+        leafNumber = (EditText) findViewById(R.id.leafView);
         ImageButton leafUpBtn = (ImageButton) findViewById(R.id.leafUpBtn);
+        leafUpBtn.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                int leafNum = 0;
+                if (leafNumber.getText().toString().equals(""))
+                    leafNum = 0;
+                else {
+                    leafNum = Integer.parseInt(leafNumber.getText().toString()) + 1;
+                    if (leafNum >= MAX_LEAVES_PER_RUN)
+                        leafNum = 0;
+                }
+                leafNumber.setText("" + leafNum);
+                paintView.currentLeaf = leafNum;
+                paintView.invalidate();
+                focusCurrentLeaf(getDisplayedRunNum(), leafNum);
+            }
+        });
         ImageButton leafDownBtn = (ImageButton) findViewById(R.id.leafDownBtn);
-        EditText leafNumber = (EditText) findViewById(R.id.leafView);
+        leafDownBtn.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                int leafNum = 0;
+                if (leafNumber.getText().toString().equals(""))
+                    leafNum = 0;
+                else {
+                    leafNum = Integer.parseInt(leafNumber.getText().toString()) - 1;
+                    if (leafNum < 0)
+                        leafNum = MAX_LEAVES_PER_RUN - 1;
+                }
+                leafNumber.setText("" + leafNum);
+                paintView.currentLeaf = leafNum;
+                paintView.invalidate();
+                focusCurrentLeaf(getDisplayedRunNum(), leafNum);
+            }
+        });
 
-        EditText xCoord = (EditText) findViewById(R.id.xCoordView);
-        EditText yCoord = (EditText) findViewById(R.id.yCoordView);
-        EditText zCoord = (EditText) findViewById(R.id.zCoordView);
+        xCoord = (EditText) findViewById(R.id.xCoordView);
+        yCoord = (EditText) findViewById(R.id.yCoordView);
+        zCoord = (EditText) findViewById(R.id.zCoordView);
 
         ImageButton updateLeafBtn = (ImageButton) findViewById(R.id.updateLeafBtn);
         updateLeafBtn.setOnClickListener(new View.OnClickListener() {

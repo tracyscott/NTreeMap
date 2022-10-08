@@ -21,6 +21,27 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight=".1"
+            android:paddingStart="10sp"
+            android:text="RUN"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+
+
+        <EditText
+            android:id="@+id/runView"
+            android:layout_width="10dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ems="10"
+            android:inputType="numberDecimal"
+            android:text="0"
+            android:textSize="24sp" />
+
         <ImageButton
             android:id="@+id/runUpBtn"
             android:layout_width="wrap_content"
@@ -36,21 +57,23 @@
             app:srcCompat="@android:drawable/arrow_down_float" />
 
         <TextView
-            android:id="@+id/textView2"
+            android:id="@+id/textView3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight=".1"
-            android:text="RUN"
+            android:paddingStart="10sp"
+            android:text="LEAF"
             android:textSize="24sp"
             android:textStyle="bold" />
 
         <EditText
-            android:id="@+id/runView"
-            android:layout_width="10dp"
+            android:id="@+id/leafView"
+            android:layout_width="30dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:ems="10"
             android:inputType="numberDecimal"
+            android:text="0"
             android:textSize="24sp" />
 
         <ImageButton
@@ -67,23 +90,6 @@
             android:layout_weight=".1"
             app:srcCompat="@android:drawable/arrow_down_float" />
 
-        <TextView
-            android:id="@+id/textView3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight=".1"
-            android:text="LEAF"
-            android:textSize="24sp"
-            android:textStyle="bold" />
-
-        <EditText
-            android:id="@+id/leafView"
-            android:layout_width="30dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:ems="10"
-            android:inputType="numberDecimal"
-            android:textSize="24sp" />
 
     </LinearLayout>
 
@@ -97,6 +103,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight=".1"
+            android:paddingStart="10sp"
             android:text="X"
             android:textSize="24sp"
             android:textStyle="bold" />
@@ -115,6 +122,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight=".1"
+            android:paddingStart="10sp"
             android:text="Y"
             android:textSize="24sp"
             android:textStyle="bold" />
@@ -133,6 +141,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight=".1"
+            android:paddingStart="10sp"
             android:text="Z"
             android:textSize="24sp"
             android:textStyle="bold" />

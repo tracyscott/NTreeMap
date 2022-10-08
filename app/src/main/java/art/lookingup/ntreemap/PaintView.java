@@ -32,6 +32,7 @@ public class PaintView extends View {
     public Point3D[][] leaves;
     public int currentRun = 0;
     public int currentLeaf = 0;
+    public boolean currentRunOnly = true;
 
     // Create some test data.
     public void generateRandomPoints(int numPoints, int radius) {
@@ -153,19 +154,34 @@ public class PaintView extends View {
         for (Point3D point: points) {
             canvas.drawCircle(toImgSpace(point.x), toImgSpace(point.z), 6, defaultPaint);
         } */
+        if (!currentRunOnly) {
+            for (int runNum = 0; runNum < MainActivity.NUM_RUNS; runNum++) {
+                // We do a first pass of all runs, skipping the current run and then draw
+                // the current run on top later in another pass below.
+                if (runNum == currentRun) continue;
+                for (int leafNum = 0; leafNum < MainActivity.MAX_LEAVES_PER_RUN; leafNum++) {
+                    Point3D leaf = leaves[runNum][leafNum];
+                    if (leaf.x == 0 && leaf.y == 0 && leaf.z == 0)
+                        continue;
+                    int imgX = (int) toImgSpace(leaf.x);
+                    int imgY = height - (int) toImgSpace(leaf.z);
+                    canvas.drawCircle(toImgSpace(leaf.x), imgY, 3, defaultPaint);
+                }
+            }
+        }
+        // For the second pass, render the current run only.
         for (int runNum = 0; runNum < MainActivity.NUM_RUNS; runNum++) {
+            if (runNum != currentRun) continue;
             for (int leafNum = 0; leafNum < MainActivity.MAX_LEAVES_PER_RUN; leafNum++) {
                 Point3D leaf = leaves[runNum][leafNum];
                 if (leaf.x == 0 && leaf.y == 0 && leaf.z == 0)
                     continue;
-                Paint whichPaint = defaultPaint;
-                if (runNum == currentRun)
-                    whichPaint = runPaint;
+                Paint whichPaint = runPaint;
                 if (runNum == currentRun && leafNum == currentLeaf)
                     whichPaint = currentPaint;
-                int imgX = (int)toImgSpace(leaf.x);
-                int imgY = height - (int)toImgSpace(leaf.z);
-                canvas.drawCircle(toImgSpace(leaf.x), imgY, 6, whichPaint);
+                int imgX = (int) toImgSpace(leaf.x);
+                int imgY = height - (int) toImgSpace(leaf.z);
+                canvas.drawCircle(toImgSpace(leaf.x), imgY, 3, whichPaint);
             }
         }
     }

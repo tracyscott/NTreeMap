@@ -30,7 +30,7 @@ public class PaintView extends View {
 
     // Leaf positions by run.  leaves[run#][leaf#];
     public Point3D[][] leaves;
-    public int currentRun = 0;
+    public int currentRun = 1;
     public int currentLeaf = 0;
     public boolean currentRunOnly = true;
 
@@ -57,7 +57,7 @@ public class PaintView extends View {
         super(context);
 
         defaultPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        defaultPaint.setColor(Color.RED);
+        defaultPaint.setColor(Color.DKGRAY);
         defaultPaint.setStyle(Paint.Style.FILL);
 
         // Use blue for the current Leaf since we have a green laser.
@@ -121,9 +121,9 @@ public class PaintView extends View {
      * For now we will just compute the bounds on every draw
      */
     public void computeBounds() {
-        for (int runNum = 0; runNum < MainActivity.NUM_RUNS; runNum++) {
+        for (int runNum = 1; runNum <= MainActivity.NUM_RUNS; runNum++) {
             for (int leafNum = 0; leafNum < MainActivity.MAX_LEAVES_PER_RUN; leafNum++) {
-                Point3D point = leaves[runNum][leafNum];
+                Point3D point = leaves[runNum-1][leafNum];
                 if (point.x < minX)
                     minX = point.x;
                 if (point.x > maxX)
@@ -155,12 +155,12 @@ public class PaintView extends View {
             canvas.drawCircle(toImgSpace(point.x), toImgSpace(point.z), 6, defaultPaint);
         } */
         if (!currentRunOnly) {
-            for (int runNum = 0; runNum < MainActivity.NUM_RUNS; runNum++) {
+            for (int runNum = 1; runNum <= MainActivity.NUM_RUNS; runNum++) {
                 // We do a first pass of all runs, skipping the current run and then draw
                 // the current run on top later in another pass below.
                 if (runNum == currentRun) continue;
                 for (int leafNum = 0; leafNum < MainActivity.MAX_LEAVES_PER_RUN; leafNum++) {
-                    Point3D leaf = leaves[runNum][leafNum];
+                    Point3D leaf = leaves[runNum-1][leafNum];
                     if (leaf.x == 0 && leaf.y == 0 && leaf.z == 0)
                         continue;
                     int imgX = (int) toImgSpace(leaf.x);
@@ -170,10 +170,10 @@ public class PaintView extends View {
             }
         }
         // For the second pass, render the current run only.
-        for (int runNum = 0; runNum < MainActivity.NUM_RUNS; runNum++) {
+        for (int runNum = 1; runNum <= MainActivity.NUM_RUNS; runNum++) {
             if (runNum != currentRun) continue;
             for (int leafNum = 0; leafNum < MainActivity.MAX_LEAVES_PER_RUN; leafNum++) {
-                Point3D leaf = leaves[runNum][leafNum];
+                Point3D leaf = leaves[runNum-1][leafNum];
                 if (leaf.x == 0 && leaf.y == 0 && leaf.z == 0)
                     continue;
                 Paint whichPaint = runPaint;

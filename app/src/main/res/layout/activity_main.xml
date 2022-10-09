@@ -39,7 +39,7 @@
             android:layout_weight="1"
             android:ems="10"
             android:inputType="numberDecimal"
-            android:text="0"
+            android:text="1"
             android:textSize="24sp" />
 
         <ImageButton
@@ -73,7 +73,7 @@
             android:layout_weight="1"
             android:ems="10"
             android:inputType="numberDecimal"
-            android:text="0"
+            android:text="1"
             android:textSize="24sp" />
 
         <ImageButton
@@ -161,5 +161,34 @@
             android:layout_height="wrap_content"
             android:layout_weight=".1"
             app:srcCompat="@android:drawable/ic_popup_sync" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/txtMsgView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ems="10"
+            android:inputType="textPersonName"
+            android:text="txt" />
+
+        <Button
+            android:id="@+id/txtMsgBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="TXT" />
+
+        <CheckBox
+            android:id="@+id/bgLeavesChk"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="BG Leaves" />
     </LinearLayout>
 </LinearLayout>

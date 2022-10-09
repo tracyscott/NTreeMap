@@ -8,4 +8,7 @@
     <item android:id="@+id/action_push"
         android:title="@string/push"
         app:showAsAction="never"/>
+    <item android:id="@+id/action_pull"
+        android:title="Pull"
+        app:showAsAction="never"/>
 </menu>

@@ -328,6 +328,20 @@ public class MainActivity extends AppCompatActivity {
 
         txtMsg = (EditText) findViewById(R.id.txtMsgView);
         txtMsgBtn = (Button) findViewById(R.id.txtMsgBtn);
+        txtMsgBtn.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                Log.d(TAG, "TXT button clicked!");
+                String txt = txtMsg.getText().toString();
+                Log.d(TAG, "TXT msg= " + txt);
+                if ("".equals(txt)) return;
+                QueueMsg qMsg = new QueueMsg();
+                qMsg.msgType = 2;
+                qMsg.txtMessage = txt;
+                synchronized (messageQueue) {
+                    messageQueue.add(qMsg);
+                }
+            }
+        });
         bgLeaves = (CheckBox) findViewById(R.id.bgLeavesChk);
 
         bgLeaves.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -482,6 +496,12 @@ public class MainActivity extends AppCompatActivity {
                                 OSCMessage message = new OSCMessage((String) thingsToSend[0],
                                         Arrays.asList(valuesToSend[0],
                                                 valuesToSend[1]));
+                                sendOscMsg(message);
+                            } else if (qMsg.msgType == 2) {
+                                // txt msg update
+                                List<Object> args = new ArrayList<Object>();
+                                args.add(qMsg.txtMessage);
+                                OSCMessage message = new OSCMessage("/ntree/txtmsg", args);
                                 sendOscMsg(message);
                             } else if (qMsg.msgType == 3) {
                                 // Set the selected leaf in LX

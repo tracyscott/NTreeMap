@@ -471,31 +471,20 @@ public class MainActivity extends AppCompatActivity {
                             QueueMsg qMsg = messageQueue.remove();
                             if (qMsg.msgType == 0) {
                                 LeafPos leafPos = qMsg.leafPos;
-                                String[] thingsToSend = new String[1];
-                                thingsToSend[0] = "/ntree/leafpos";
-                                Object[] valuesToSend = new String[5];
-                                valuesToSend[0] = "" + leafPos.runNum;
-                                valuesToSend[1] = "" + leafPos.leafNum;
-                                valuesToSend[2] = "" + leafPos.pos.x;
-                                valuesToSend[3] = "" + leafPos.pos.y;
-                                valuesToSend[4] = "" + leafPos.pos.z;
-                                OSCMessage message = new OSCMessage((String) thingsToSend[0],
-                                        Arrays.asList(valuesToSend[0],
-                                                valuesToSend[1],
-                                                valuesToSend[2],
-                                                valuesToSend[3],
-                                                valuesToSend[4]));
+                                List<Object> args = new ArrayList<Object>();
+                                args.add("" + leafPos.runNum);
+                                args.add("" + leafPos.leafNum);
+                                args.add("" + leafPos.pos.x);
+                                args.add("" + leafPos.pos.y);
+                                args.add("" + leafPos.pos.z);
+                                OSCMessage message = new OSCMessage("/ntree/leafpos", args);
                                 sendOscMsg(message);
                             } else if (qMsg.msgType == 1) {
                                 // Request LX send us leaf positions for a run
-                                String[] thingsToSend = new String[1];
-                                thingsToSend[0] = "/ntree/sendrun";
-                                Object[] valuesToSend = new String[2];
-                                valuesToSend[0] = myIP;
-                                valuesToSend[1] = "" + qMsg.runNum;
-                                OSCMessage message = new OSCMessage((String) thingsToSend[0],
-                                        Arrays.asList(valuesToSend[0],
-                                                valuesToSend[1]));
+                                List<Object> args = new ArrayList<Object>();
+                                args.add(myIP);
+                                args.add("" + qMsg.runNum);
+                                OSCMessage message = new OSCMessage("/ntree/sendrun", args);
                                 sendOscMsg(message);
                             } else if (qMsg.msgType == 2) {
                                 // txt msg update
@@ -505,22 +494,16 @@ public class MainActivity extends AppCompatActivity {
                                 sendOscMsg(message);
                             } else if (qMsg.msgType == 3) {
                                 // Set the selected leaf in LX
-                                String[] thingsToSend = new String[1];
-                                thingsToSend[0] = "/ntree/leafsel";
-                                Object[] valuesToSend = new String[2];
-                                valuesToSend[0] = "" + qMsg.runNum;
-                                valuesToSend[1] = "" + qMsg.leafNum;
-                                OSCMessage message = new OSCMessage((String) thingsToSend[0],
-                                        Arrays.asList(valuesToSend[0], valuesToSend[1]));
+                                List<Object> args = new ArrayList<Object>();
+                                args.add("" + qMsg.runNum);
+                                args.add("" + qMsg.leafNum);
+                                OSCMessage message = new OSCMessage("/ntree/leafsel", args);
                                 sendOscMsg(message);
                             } else if (qMsg.msgType == 4) {
                                 // Turn on/off background leaves
-                                String[] thingsToSend = new String[1];
-                                thingsToSend[0] = "/ntree/bgleaves";
-                                Object[] valuesToSend = new String[1];
-                                valuesToSend[0] = (qMsg.bgLeaves)?"1":"0";
-                                OSCMessage message = new OSCMessage((String) thingsToSend[0],
-                                        Arrays.asList(valuesToSend[0]));
+                                List<Object> args = new ArrayList<Object>();
+                                args.add((qMsg.bgLeaves)?"1":"0");
+                                OSCMessage message = new OSCMessage("/ntree/bgleaves", args);
                                 sendOscMsg(message);
                             }
                         }
